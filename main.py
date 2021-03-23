@@ -10,12 +10,13 @@ class App():
         self.root = tk.Tk()
         self.root.title("Bot controler")
         #Header text
-        self.header = tk.Label(self.root,text = "Hello World")
+        self.header = tk.Label(self.root,text = "Press start when the game is ready!")
         self.header.grid(column = 0, row = 0)
         #Start button
         self.startBtn = ttk.Button(self.root, text = "Start!", command=self.startBot)
-        self.startBtn.grid(column = 0, row = 1)
-        #self.root.resizable(0,0)
+        self.startBtn.grid(column = 0, row = 1);
+        self.root.geometry("200x60")
+        self.root.resizable(0,0)
         self.root.mainloop()
     def startBot(self):
         Pianotiles()

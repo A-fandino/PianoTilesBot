@@ -74,4 +74,6 @@ class Pianotiles():
         else:
             return False
 
-Pianotiles()
+
+if __name__ == '__main__':
+	Pianotiles()
