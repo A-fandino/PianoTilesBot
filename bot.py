@@ -10,6 +10,7 @@ class Pianotiles():
 
         self.INIT_COLOR = "[ 54 159 198]" #The colour of the initial TILE
         self.TILE_COLOR = "[0 0 0]" #The colour of the game TILES
+        self.BORDER_COLOR = "[  2 130 197]" #Colour of the borders 
 
         #minX, minY, maxX, maxY = (640,0,1280,820)
         self.minX, self.minY, self.maxX, self.maxY = (640,800,1280,801)
@@ -25,27 +26,20 @@ class Pianotiles():
         self.mouse = Controller()
 
         self.cutWidth = 1 # Decides the width of each column
-        self.stillInGame();
-        #self.StartGame(self.INIT_COLOR, -20) #Clicks the START tile
-        #while(True):
-        #    self.StartGame(self.TILE_COLOR, 100) 
+        if(self.stillInGame()):
+            self.StartGame(self.INIT_COLOR, -20) #Clicks the START tile
+            while(self.stillInGame()):
+                self.StartGame(self.TILE_COLOR, 100) 
 
     def newImage(self): #Makes a screenshot to analyze the colours
         image = np.array(ImageGrab.grab(self.game_coords))
         newImg = []
-
+        
         for x in range(self.columns):
             initX = int(self.column_width * x + self.column_width / 2 - self.cutWidth / 2)
             endX = int(self.column_width * x + self.column_width / 2 + self.cutWidth / 2)
-            #print(initX, endX)
             newImg.append(image[:, initX:endX])
         return newImg
-
-
-    #Image to array
-    #image = np.array(ImageGrab.grab(game_coords))
-
-    #Automatize column cutting
 
 
     def StartGame(self, tile_color, y_adjust):
@@ -53,7 +47,7 @@ class Pianotiles():
 
         #SEARCH FOR INIT TILE
         for i in range(len(newImg)):
-            desired = False #Defines if the desired TILE it's been found
+            desired = False #Defines if the desired TILE has been found
 
             for y in range(len(newImg[i])): #DETECTS TILES AND CLICKS THEM
 
@@ -63,47 +57,21 @@ class Pianotiles():
                     if(str(newImg[i][y][x]) == tile_color):
                         x_ = self.minX + self.column_width/2 + (i * self.column_width) #It's the center of the tile
                         self.mouse.position = (x_,self.minY+y_adjust) #Moves the mouse to the tile
-                        self.mouse.click(Button.left, 1) #Click the tile, duh
+                        self.mouse.click(Button.left, 1) #Clicks the tile
                         #print("TILE found on ({},{})".format(x_ ,y))
                         desired = True
-                        break;
+                        break
 
                 if desired:
-                    break;
-    def stillInGame(self): # Lateral colour #0282C5
-        newImg = self.newImage()
-        """print(newImg[2])
-        if (str(newImg[2]) == "[[[ 39 146 187]]]" ):
-            print("AY LMAO")
-            return True;
+                    break
+    def stillInGame(self): 
+        img = np.array(ImageGrab.grab((623,0,1300,1)))
+        firstPixel = str(img[0][0])
+        lastPixel = str(img[-1][-1])
+        print(firstPixel)
+        if (firstPixel == self.BORDER_COLOR and lastPixel == self.BORDER_COLOR ):
+            return True
         else:
-            print("AYMAN")
-            return False;"""
-        canvas=plt.figure(figsize=(8, 8))
-        #NECESITAS COGER EL COLOR DE LOS LATERALES!!!
-        plt.grid(True)
-        plt.gray()
-        plt.axis('off')
-        for x in range(1,self.columns+1):
-            canvas.add_subplot(1, self.columns, x)
-            plt.imshow(newImg[x-1])
+            return False
 
-        plt.show()
-Pianotiles();
-
-#Display Image (JUST FOR TESTING)
-
-"""
-canvas=plt.figure(figsize=(8, 8))
-
-plt.grid(True)
-plt.gray()
-plt.axis('off')
-for x in range(1,columns+1):
-    canvas.add_subplot(1, columns, x)
-    plt.imshow(newImg[x-1])
-
-plt.show()
-
-def mouseClick(i,y):
-    pass"""
+Pianotiles()
